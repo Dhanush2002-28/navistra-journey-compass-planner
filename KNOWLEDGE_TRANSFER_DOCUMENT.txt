@@ -1,0 +1,528 @@
+================================================================================
+                    NAVISTRA TRAVEL PLANNER - KNOWLEDGE TRANSFER DOCUMENT
+================================================================================
+
+PROJECT OVERVIEW:
+NAVISTRA is a full-stack travel planning application with AI-powered chatbot functionality, 
+PDF itinerary generation, and dark mode support. Built with React/TypeScript frontend and 
+Node.js backend with SQLite database.
+
+================================================================================
+                              SYSTEM ARCHITECTURE
+================================================================================
+
+FRONTEND STACK:
+- React 18 with TypeScript
+- Vite build tool
+- Tailwind CSS for styling
+- Shadcn/ui component library
+- React Router for navigation
+- Lucide React for icons
+
+BACKEND STACK:
+- Node.js with Express.js
+- SQLite database with better-sqlite3
+- JWT authentication
+- PDFKit for PDF generation
+- Multiple AI API integrations (Gemini, Groq, Hugging Face)
+
+================================================================================
+                           COMPLETE PROJECT STRUCTURE
+================================================================================
+
+navistra-journey-compass-planner/
+├── backend/
+│   ├── index.js                    # Main server file
+│   ├── db.js                       # Database configuration
+│   ├── package.json                # Backend dependencies
+│   ├── .env                        # Environment variables (API keys)
+│   ├── seed-itineraries.js         # Database seeding script
+│   ├── test-destinations.js        # Database testing script
+│   └── routes/
+│       ├── auth.js                 # Authentication endpoints
+│       ├── chat.js                 # AI chatbot endpoints
+│       ├── itineraries.js          # Trip itinerary endpoints
+│       ├── pdf.js                  # PDF generation endpoints
+│       └── trips.js                # Trip management endpoints
+├── src/
+│   ├── App.tsx                     # Main app component
+│   ├── main.tsx                    # App entry point
+│   ├── index.css                   # Global styles and theme variables
+│   ├── components/
+│   │   ├── Chatbot.tsx             # AI chatbot component
+│   │   ├── Layout.tsx              # App layout wrapper
+│   │   ├── Navbar.tsx              # Navigation with dark mode toggle
+│   │   ├── theme-provider.tsx      # Dark mode context provider
+│   │   ├── theme-toggle.tsx        # Dark mode toggle button
+│   │   └── ui/                     # Shadcn/ui components
+│   ├── hooks/
+│   │   ├── use-mobile.tsx          # Mobile detection hook
+│   │   └── use-toast.ts            # Toast notification hook
+│   ├── lib/
+│   │   └── utils.ts                # Utility functions
+│   └── pages/
+│       ├── Dashboard.tsx           # User dashboard with trips
+│       ├── Home.tsx                # Landing page
+│       ├── Login.tsx               # User login page
+│       ├── Signup.tsx              # User registration page
+│       ├── PlanTrip.tsx            # Trip planning form
+│       ├── Index.tsx               # Route index
+│       └── NotFound.tsx            # 404 error page
+├── public/
+│   ├── favicon.ico
+│   ├── placeholder.svg
+│   └── robots.txt
+├── package.json                    # Frontend dependencies
+├── vite.config.ts                  # Vite configuration
+├── tailwind.config.ts              # Tailwind CSS configuration
+├── tsconfig.json                   # TypeScript configuration
+├── components.json                 # Shadcn/ui configuration
+└── README.md                       # Project documentation
+
+================================================================================
+                              INSTALLATION GUIDE
+================================================================================
+
+PREREQUISITES:
+1. Node.js 18+ installed
+2. npm or yarn package manager
+3. Git for version control
+4. Code editor (VS Code recommended)
+
+STEP 1: CLONE AND SETUP PROJECT
+1. Clone the repository:
+   git clone <repository-url>
+   cd navistra-journey-compass-planner
+
+2. Install frontend dependencies:
+   npm install
+
+3. Install backend dependencies:
+   cd backend
+   npm install
+   cd ..
+
+STEP 2: ENVIRONMENT CONFIGURATION
+1. Create backend/.env file with the following variables:
+   
+   # Database
+   DB_PATH=./navistra.db
+   
+   # JWT Secret (generate a secure random string)
+   JWT_SECRET=your_jwt_secret_here_minimum_32_characters
+   
+   # AI API Keys (obtain from respective providers)
+   GEMINI_API_KEY=your_google_gemini_api_key
+   GROQ_API_KEY=your_groq_api_key
+   HUGGING_FACE_API_KEY=your_hugging_face_api_key
+   
+   # Server Configuration
+   PORT=5000
+   NODE_ENV=development
+
+STEP 3: DATABASE SETUP
+1. Initialize and seed the database:
+   cd backend
+   node seed-itineraries.js
+   cd ..
+
+STEP 4: START THE APPLICATION
+1. Start backend server:
+   cd backend
+   npm start
+   # Server runs on http://localhost:5000
+
+2. Start frontend development server (in new terminal):
+   npm run dev
+   # Frontend runs on http://localhost:5173
+
+================================================================================
+                               AI API SETUP GUIDE
+================================================================================
+
+GOOGLE GEMINI API SETUP:
+1. Go to https://makersuite.google.com/app/apikey
+2. Create a new API key
+3. Add to backend/.env as GEMINI_API_KEY=your_key_here
+4. Free tier: 60 requests per minute
+
+GROQ API SETUP:
+1. Go to https://console.groq.com/keys
+2. Create account and generate API key
+3. Add to backend/.env as GROQ_API_KEY=your_key_here
+4. Free tier: Very fast inference
+
+HUGGING FACE API SETUP:
+1. Go to https://huggingface.co/settings/tokens
+2. Create a new token
+3. Add to backend/.env as HUGGING_FACE_API_KEY=your_key_here
+4. Free tier: Rate limited but functional
+
+AI FALLBACK SYSTEM:
+- If all AI APIs fail, system uses enhanced rule-based responses
+- Fallback provides travel-specific intelligent responses
+- No API keys required for basic functionality
+
+================================================================================
+                             FEATURES IMPLEMENTED
+================================================================================
+
+1. USER AUTHENTICATION SYSTEM:
+   - User registration and login
+   - JWT token-based authentication
+   - Password hashing with bcrypt
+   - Session management with localStorage
+
+2. AI-POWERED CHATBOT:
+   - Multi-provider AI system (Gemini → Groq → Hugging Face)
+   - Enhanced rule-based fallback system
+   - Travel-specific conversation context
+   - Markdown formatting cleanup
+   - Conversation history awareness
+   - Debug logging for troubleshooting
+
+3. TRIP PLANNING SYSTEM:
+   - Interactive trip planning form
+   - Budget calculation and validation
+   - Date range selection
+   - Travel style preferences
+   - Automatic itinerary generation
+
+4. DASHBOARD FUNCTIONALITY:
+   - Trip management (view, delete)
+   - Personalized itinerary display
+   - Trip statistics and overview
+   - PDF download for each trip
+   - Responsive design
+
+5. PDF GENERATION:
+   - NAVISTRA branded PDF itineraries
+   - Complete trip details and day-wise plans
+   - Cost breakdown and highlights
+   - Professional formatting
+   - Downloadable from dashboard
+
+6. DARK MODE SUPPORT:
+   - System-wide dark/light theme toggle
+   - Consistent theming across all pages
+   - Theme persistence in localStorage
+   - Rich dark mode color palette
+   - Glass-effect components
+
+7. RESPONSIVE DESIGN:
+   - Mobile-first approach
+   - Tablet and desktop optimization
+   - Touch-friendly interfaces
+   - Adaptive layouts
+
+================================================================================
+                              DATABASE SCHEMA
+================================================================================
+
+USERS TABLE:
+- id (INTEGER PRIMARY KEY)
+- name (TEXT NOT NULL)
+- email (TEXT UNIQUE NOT NULL)
+- password_hash (TEXT NOT NULL)
+- created_at (DATETIME DEFAULT CURRENT_TIMESTAMP)
+
+TRIPS TABLE:
+- id (TEXT PRIMARY KEY)
+- user_id (INTEGER)
+- destination (TEXT NOT NULL)
+- start_date (TEXT)
+- end_date (TEXT)
+- budget_inr (TEXT)
+- travel_style (TEXT)
+- travelers (TEXT)
+- created_at (DATETIME DEFAULT CURRENT_TIMESTAMP)
+- FOREIGN KEY (user_id) REFERENCES users(id)
+
+ITINERARIES TABLE:
+- id (INTEGER PRIMARY KEY)
+- destination (TEXT UNIQUE NOT NULL)
+- summary (TEXT)
+- details (TEXT)
+- daywise (TEXT)
+- estimated_cost_inr (INTEGER)
+- over_budget (BOOLEAN)
+- created_at (DATETIME DEFAULT CURRENT_TIMESTAMP)
+
+================================================================================
+                              API ENDPOINTS
+================================================================================
+
+AUTHENTICATION ROUTES (/api/auth):
+- POST /signup - User registration
+- POST /login - User login
+
+TRIP MANAGEMENT ROUTES (/api/trips):
+- GET / - Get user's trips (requires auth)
+- POST / - Create new trip (requires auth)
+- DELETE /:id - Delete trip (requires auth)
+
+ITINERARY ROUTES (/api/itineraries):
+- GET /:destination - Get itinerary for destination
+- GET /:destination?days=X&budget=Y - Get customized itinerary
+
+CHATBOT ROUTES (/api/chat):
+- POST / - Send message to chatbot
+- GET /models - Get AI provider status
+
+PDF ROUTES (/api/pdf):
+- GET /generate/:tripId - Generate and download trip PDF (requires auth)
+
+================================================================================
+                              KEY CODE CHANGES
+================================================================================
+
+BACKEND MODIFICATIONS:
+
+1. backend/routes/chat.js - AI CHATBOT SYSTEM:
+   - Implemented multi-provider AI system
+   - Added comprehensive debug logging
+   - Enhanced fallback response system
+   - Markdown formatting cleanup
+   - Travel-specific context building
+   
+2. backend/routes/pdf.js - PDF GENERATION:
+   - Created PDF generation endpoint
+   - NAVISTRA branding and styling
+   - Trip details and itinerary formatting
+   - Error handling and authentication
+
+3. backend/index.js - SERVER CONFIGURATION:
+   - Added PDF route registration
+   - Environment variable logging
+   - CORS configuration
+   - Static file serving
+
+FRONTEND MODIFICATIONS:
+
+1. src/components/theme-provider.tsx - THEME SYSTEM:
+   - Dark mode context provider
+   - Theme persistence
+   - System theme detection
+
+2. src/components/Navbar.tsx - NAVIGATION:
+   - Dark mode toggle integration
+   - Responsive navigation
+   - User authentication state
+
+3. src/pages/Dashboard.tsx - DASHBOARD:
+   - PDF download functionality
+   - Dark mode color fixes
+   - Trip management improvements
+   - Modal enhancements
+
+4. src/pages/Login.tsx & Signup.tsx - AUTHENTICATION:
+   - Dark mode theming
+   - Glass effect styling
+   - Form validation
+
+5. src/index.css - STYLING SYSTEM:
+   - Dark mode CSS variables
+   - Travel-themed color palette
+   - Glass effect utilities
+   - Gradient definitions
+
+================================================================================
+                             DEPLOYMENT CONSIDERATIONS
+================================================================================
+
+ENVIRONMENT VARIABLES FOR PRODUCTION:
+- Set NODE_ENV=production
+- Use secure JWT_SECRET (32+ characters)
+- Configure proper CORS origins
+- Set up SSL certificates
+- Use environment-specific database paths
+
+SECURITY CONSIDERATIONS:
+- Never commit .env files to version control
+- Use HTTPS in production
+- Implement rate limiting for API endpoints
+- Validate all user inputs
+- Sanitize database queries
+
+PERFORMANCE OPTIMIZATIONS:
+- Implement API response caching
+- Optimize database queries
+- Use CDN for static assets
+- Implement proper error boundaries
+- Add loading states
+
+================================================================================
+                           HANDOVER INSTRUCTIONS
+================================================================================
+
+FOR NEW DEVELOPER TAKING OVER:
+
+1. IMMEDIATE SETUP:
+   - Follow installation guide above
+   - Obtain API keys from respective providers
+   - Test all functionality locally
+   - Review code structure and architecture
+
+2. CRITICAL FILES TO UNDERSTAND:
+   - backend/routes/chat.js (AI system core)
+   - src/components/theme-provider.tsx (theming)
+   - backend/db.js (database configuration)
+   - src/pages/Dashboard.tsx (main user interface)
+
+3. CONFIGURATION FILES:
+   - backend/.env (all environment variables)
+   - tailwind.config.ts (styling configuration)
+   - vite.config.ts (build configuration)
+   - package.json files (dependencies)
+
+4. TESTING CHECKLIST:
+   □ User registration and login
+   □ Trip creation and management
+   □ Chatbot functionality (with and without API keys)
+   □ PDF download feature
+   □ Dark mode toggle
+   □ Responsive design on mobile/tablet
+   □ Database operations
+
+5. POTENTIAL MODIFICATION AREAS:
+   - Add new AI providers in chat.js
+   - Customize PDF styling in pdf.js
+   - Add new trip fields in database schema
+   - Enhance chatbot responses
+   - Add new pages/components
+
+6. MONITORING AND MAINTENANCE:
+   - Monitor AI API usage and costs
+   - Regular database backups
+   - Update dependencies regularly
+   - Monitor error logs
+   - Test after any API changes
+
+================================================================================
+                              TROUBLESHOOTING
+================================================================================
+
+COMMON ISSUES AND SOLUTIONS:
+
+1. CHATBOT NOT RESPONDING:
+   - Check API keys in backend/.env
+   - Verify internet connection
+   - Check console logs for API errors
+   - Fallback system should still work
+
+2. PDF DOWNLOAD FAILING:
+   - Ensure user is authenticated
+   - Check trip exists in database
+   - Verify PDF route is registered
+   - Check file permissions
+
+3. DARK MODE NOT WORKING:
+   - Clear localStorage
+   - Check theme provider setup
+   - Verify CSS variables in index.css
+   - Test theme toggle component
+
+4. DATABASE ERRORS:
+   - Re-run seed script
+   - Check file permissions
+   - Verify database path
+   - Check SQL syntax in queries
+
+5. BUILD ERRORS:
+   - Clear node_modules and reinstall
+   - Update dependencies
+   - Check TypeScript errors
+   - Verify import paths
+
+================================================================================
+                              PACKAGE DEPENDENCIES
+================================================================================
+
+FRONTEND DEPENDENCIES (package.json):
+- react: ^18.2.0
+- react-dom: ^18.2.0
+- react-router-dom: ^6.8.1
+- @radix-ui/* (shadcn/ui components)
+- lucide-react: ^0.263.1
+- tailwindcss: ^3.3.0
+- typescript: ^5.0.2
+- vite: ^4.4.5
+
+BACKEND DEPENDENCIES (backend/package.json):
+- express: ^4.18.2
+- better-sqlite3: ^8.7.0
+- bcryptjs: ^2.4.3
+- jsonwebtoken: ^9.0.2
+- pdfkit: ^0.13.0
+- cors: ^2.8.5
+- dotenv: ^16.3.1
+
+================================================================================
+                           VERSION CONTROL NOTES
+================================================================================
+
+IMPORTANT FILES TO IGNORE:
+- .env files (contain sensitive API keys)
+- node_modules/ directories
+- dist/ build directories
+- *.db database files
+- .DS_Store (macOS)
+- Thumbs.db (Windows)
+
+BRANCHES STRUCTURE:
+- main: Production-ready code
+- develop: Development branch
+- feature/*: Feature branches
+- hotfix/*: Critical fixes
+
+COMMIT MESSAGE CONVENTIONS:
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation changes
+- style: Code formatting
+- refactor: Code restructuring
+- test: Test additions
+- chore: Maintenance tasks
+
+================================================================================
+                              SUPPORT CONTACTS
+================================================================================
+
+TECHNOLOGY STACK DOCUMENTATION:
+- React: https://react.dev/
+- Vite: https://vitejs.dev/
+- Tailwind CSS: https://tailwindcss.com/
+- Shadcn/ui: https://ui.shadcn.com/
+- Express.js: https://expressjs.com/
+- Better SQLite3: https://github.com/WiseLibs/better-sqlite3
+
+AI PROVIDER DOCUMENTATION:
+- Google Gemini: https://ai.google.dev/
+- Groq: https://groq.com/
+- Hugging Face: https://huggingface.co/docs
+
+================================================================================
+                                 FINAL NOTES
+================================================================================
+
+This system is production-ready with the following considerations:
+1. All major features implemented and tested
+2. Comprehensive error handling in place
+3. Responsive design across devices
+4. Multiple AI fallback systems
+5. Secure authentication implementation
+6. Rich dark mode theming
+
+The codebase is well-structured, documented, and follows modern development 
+practices. The modular architecture allows for easy extension and maintenance.
+
+For any technical questions or clarifications, refer to the inline code 
+comments and this documentation.
+
+Last Updated: July 6, 2025
+System Version: 1.0.0
+Document Version: 1.0
+
+================================================================================
+                              END OF DOCUMENT
+================================================================================

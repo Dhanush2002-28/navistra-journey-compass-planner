@@ -1,17 +1,17 @@
-
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Plane, User, LogOut } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Plane, User, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const isAuthenticated = localStorage.getItem('navistra_user'); // Simple auth check
+  const isAuthenticated = localStorage.getItem("navistra_user"); // Simple auth check
 
   const handleLogout = () => {
-    localStorage.removeItem('navistra_user');
-    window.location.href = '/';
+    localStorage.removeItem("navistra_user");
+    window.location.href = "/";
   };
 
   return (
@@ -19,52 +19,63 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 text-primary font-bold text-xl">
+          <Link
+            to="/"
+            className="flex items-center space-x-2 text-primary font-bold text-xl"
+          >
             <Plane className="h-6 w-6" />
             <span>NAVISTRA</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                location.pathname === '/' ? 'text-primary' : 'text-foreground'
+                location.pathname === "/" ? "text-primary" : "text-foreground"
               }`}
             >
               Home
             </Link>
-            
+
             {isAuthenticated ? (
               <>
-                <Link 
-                  to="/dashboard" 
+                <Link
+                  to="/dashboard"
                   className={`text-sm font-medium transition-colors hover:text-primary ${
-                    location.pathname === '/dashboard' ? 'text-primary' : 'text-foreground'
+                    location.pathname === "/dashboard"
+                      ? "text-primary"
+                      : "text-foreground"
                   }`}
                 >
                   Dashboard
                 </Link>
-                <Link 
-                  to="/plan-trip" 
+                <Link
+                  to="/plan-trip"
                   className={`text-sm font-medium transition-colors hover:text-primary ${
-                    location.pathname === '/plan-trip' ? 'text-primary' : 'text-foreground'
+                    location.pathname === "/plan-trip"
+                      ? "text-primary"
+                      : "text-foreground"
                   }`}
                 >
                   Plan Trip
                 </Link>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="text-sm font-medium"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </Button>
+                <div className="flex items-center space-x-3">
+                  <ThemeToggle />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleLogout}
+                    className="text-sm font-medium"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </div>
               </>
             ) : (
               <div className="flex items-center space-x-4">
+                <ThemeToggle />
                 <Link to="/login">
                   <Button variant="ghost" size="sm">
                     <User className="h-4 w-4 mr-2" />
@@ -81,13 +92,18 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-3">
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </Button>
           </div>
         </div>
@@ -103,7 +119,7 @@ export const Navbar = () => {
               >
                 Home
               </Link>
-              
+
               {isAuthenticated ? (
                 <>
                   <Link

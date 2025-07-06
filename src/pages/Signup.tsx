@@ -1,18 +1,23 @@
-
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Plane } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Plane } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 const Signup = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -32,35 +37,48 @@ const Signup = () => {
       return;
     }
 
-    // Simulate user registration (replace with real auth logic)
-    setTimeout(() => {
-      if (name && email && password) {
-        // Store user data (in a real app, this would create account and return JWT)
-        localStorage.setItem('navistra_user', JSON.stringify({
-          name,
-          email,
-          signupTime: new Date().toISOString()
-        }));
-        
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem(
+          "navistra_user",
+          JSON.stringify({
+            name: data.user.name,
+            email: data.user.email,
+            token: data.token,
+            signupTime: new Date().toISOString(),
+          })
+        );
         toast({
           title: "Account created successfully!",
-          description: "Welcome to NAVISTRA. Let's start planning your first trip!",
+          description:
+            "Welcome to NAVISTRA. Let's start planning your first trip!",
         });
-        
-        navigate('/plan-trip');
+        navigate("/plan-trip");
       } else {
         toast({
           title: "Signup failed",
-          description: "Please fill in all required fields.",
+          description: data.message || "Please fill in all required fields.",
           variant: "destructive",
         });
       }
-      setLoading(false);
-    }, 1000);
+    } catch (err) {
+      toast({
+        title: "Signup failed",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 dark:from-background dark:to-slate-900/50 p-4">
       <Card className="w-full max-w-md glass-effect">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
@@ -98,13 +116,13 @@ const Signup = () => {
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -117,7 +135,11 @@ const Signup = () => {
                   className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             </div>
@@ -139,14 +161,17 @@ const Signup = () => {
               className="w-full gradient-ocean text-white hover:opacity-90 transition-opacity"
               disabled={loading}
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? "Creating account..." : "Create Account"}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{' '}
-              <Link to="/login" className="text-primary hover:underline font-medium">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign in here
               </Link>
             </p>
